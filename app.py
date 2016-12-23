@@ -37,6 +37,8 @@ def showAllItemss(id):
     return render_template('items.html', items=items, category=category)
     # return "This page will show all home page"
 
+
+#adding new item in catogery
 @app.route('/catalog/<int:id>/newitem', methods=['GET', 'POST'])
 def addNewItem(id):
      category = session.query(Category).filter_by(id=id).one()
@@ -49,6 +51,14 @@ def addNewItem(id):
      else:
          return render_template('newitem.html',category=category)
     # return "This page will show all home page"
+ 
+#for view a specific item
+@app.route('/catalog/<int:id>/<int:item_id>/viewitem')
+def viewItem(id,item_id):
+     category = session.query(Category).filter_by(id=id).one()
+     item = session.query(Item).filter_by(id=item_id).one()
+     return render_template('item.html',item=item)
+    # return "This page will show all home page"    
     
 
 @app.route('/catalog/Snowboarding/Snowboard')
