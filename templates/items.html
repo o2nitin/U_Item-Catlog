@@ -1,2 +1,22 @@
 <h2>ITEMS HTML</h2>
 <a href="/catalog/Snowboarding/Snowboard">Snowboard</a>
+
+<h1>{{category.name}}</h1>
+
+	{% for i in items %}
+		
+
+		<p>{{i.name}}</p>
+	
+
+		<p>{{i.description}}</p>
+	
+
+	
+</br>
+</br>
+
+
+		{% endfor %}
+
+		

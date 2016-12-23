@@ -6,5 +6,20 @@
         <h2>
             Items Catlog</h2>
             <a href="catalog/Snowboarding/items">Snowboarding</a>
+            <a href="\addnewcat">add new cat</a>
+
+            {% for category in categories %}
+
+
+
+<p>{{category.name}}</p>
+<a href="/catalog/{{category.id}}/items">view</a>
+
+
+
+
+
+{% endfor %}
+
     </body>
 </html>
