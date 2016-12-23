@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <h1>edit item <h1>
     <form method="post">
     Name: <input type="text" name="name" value="{{item.name}}">
@@ -5,3 +9,4 @@
     URL: <input type="text" name="img_url" value="{{item.img_url}}">
     <input type="submit" value="Update item">
     </form>
+    {% endblock %}

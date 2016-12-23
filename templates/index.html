@@ -1,11 +1,12 @@
-<html>
-    <head>
-        <title> Items catlog</title>
-    </head>
-    <body>
-        <h2>
-            Items Catlog</h2>
-            <a href="catalog/Snowboarding/items">Snowboarding</a>
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+
+            
+            
             <a href="\addnewcat">add new cat</a>
 
             {% for category in categories %}
@@ -20,6 +21,6 @@
 
 
 {% endfor %}
-
-    </body>
-</html>
+<hr/>
+{% endblock %}
+        
