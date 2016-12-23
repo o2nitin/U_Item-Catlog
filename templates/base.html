@@ -12,7 +12,10 @@
       <div class="container">
           <div class="row">
              <a href="/"    > 
-             <div class = 'flash'>
+          
+              <h2>
+            Items Catlog</h2></a>
+               <div class = 'flash'>
 		      {% with messages = get_flashed_messages() %}
       {% if messages %}
           
@@ -25,8 +28,6 @@
     {% endwith %}
 
 </div>
-              <h2>
-            Items Catlog</h2></a>
 
   {% block content %}
   {% endblock %}
