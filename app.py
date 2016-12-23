@@ -57,8 +57,20 @@ def addNewItem(id):
 def viewItem(id,item_id):
      category = session.query(Category).filter_by(id=id).one()
      item = session.query(Item).filter_by(id=item_id).one()
-     return render_template('item.html',item=item)
-    # return "This page will show all home page"    
+     return render_template('item.html',item=item,category=category)
+    # return "This page will show all home page"
+
+
+# delete item from list
+@app.route('/catalog/<int:id>/<int:item_id>/deleteitem', methods=['GET', 'POST'])
+def deleteItem(id,item_id):
+     itemToDelete = session.query(Item).filter_by(id=item_id).one()
+     if request.method == 'POST':
+         session.delete(itemToDelete)
+         session.commit()
+         return redirect(url_for('showAllItemss',id=id))
+     else:
+         return render_template('deleteitem.html')    
     
 
 @app.route('/catalog/Snowboarding/Snowboard')
