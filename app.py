@@ -36,6 +36,19 @@ def showAllItemss(id):
         category_id=id).all()
     return render_template('items.html', items=items, category=category)
     # return "This page will show all home page"
+
+@app.route('/catalog/<int:id>/newitem', methods=['GET', 'POST'])
+def addNewItem(id):
+     category = session.query(Category).filter_by(id=id).one()
+     if request.method == 'POST':
+         newItem = Item(name=request.form['name'],img_url=request.form['img_url'],
+                            description=request.form['description'],category_id=id)
+         session.add(newItem)
+         session.commit()
+         return redirect(url_for('showAllItemss',id=id))
+     else:
+         return render_template('newitem.html',category=category)
+    # return "This page will show all home page"
     
 
 @app.route('/catalog/Snowboarding/Snowboard')
