@@ -1,7 +1,10 @@
 <h2>ITEMS HTML</h2>
 <a href="/catalog/Snowboarding/Snowboard">Snowboard</a>
 
-<h1>{{category.name}}</h1> <a href="/catalog/{{category.id}}/newitem">Add new item</a>
+<h1>{{category.name}}</h1> 
+
+<a href="/catalog/{{category.id}}/newitem">Add new item</a>
+<hr/>
 
 	{% for i in items %}
 		

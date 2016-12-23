@@ -70,7 +70,24 @@ def deleteItem(id,item_id):
          session.commit()
          return redirect(url_for('showAllItemss',id=id))
      else:
-         return render_template('deleteitem.html')    
+         return render_template('deleteitem.html')  
+
+#  edit item
+@app.route('/catalog/<int:id>/<int:item_id>/edititem', methods=['GET', 'POST'])
+def editItem(id,item_id):
+    editedItem = session.query(Item).filter_by(id=item_id).one()
+    if request.method == 'POST':
+        
+        editedItem.name = request.form['name']
+     
+        editedItem.description = request.form['description']
+       
+        editedItem.img_url = request.form['img_url']
+        session.add(editedItem)
+        session.commit()
+        return redirect(url_for('viewItem',id=id,item_id=item_id))
+    else:
+         return render_template('edititem.html',item=editedItem)    
     
 
 @app.route('/catalog/Snowboarding/Snowboard')

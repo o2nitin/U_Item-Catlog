@@ -3,5 +3,5 @@
 {{item.name}}
 {{item.description}}
 <img src="{{item.img_url}}" height="200" width="200">
-<a href="/catalog/Snowboard/edit">edit</a>
+<a href="{{url_for('editItem', id = category.id, item_id = item.id )}}">edit</a>
 <a href="{{url_for('deleteItem', id = category.id, item_id = item.id )}}">Delete</a>
