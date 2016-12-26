@@ -257,29 +257,39 @@ def viewItem(id,item_id):
 @app.route('/catalog/<int:id>/<int:item_id>/deleteitem', methods=['GET', 'POST'])
 def deleteItem(id,item_id):
      itemToDelete = session.query(Item).filter_by(id=item_id).one()
-     if request.method == 'POST':
-         session.delete(itemToDelete)
-         session.commit()
-         return redirect(url_for('showAllItemss',id=id))
-     else:
-         return render_template('deleteitem.html')  
+     creator = getUserInfo(itemToDelete.user_id)
+     if 'username' not in login_session or creator.id != login_session['user_id']:
+         flash("you are not allow to access this url")
+         return redirect('/')
+     else:    
+        if request.method == 'POST':
+            session.delete(itemToDelete)
+            session.commit()
+            return redirect(url_for('showAllItemss',id=id))
+        else:
+            return render_template('deleteitem.html')  
 
 #  edit item
 @app.route('/catalog/<int:id>/<int:item_id>/edititem', methods=['GET', 'POST'])
 def editItem(id,item_id):
     editedItem = session.query(Item).filter_by(id=item_id).one()
-    if request.method == 'POST':
+    creator = getUserInfo(editedItem.user_id)
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+         flash("you are not allow to access this url")
+         return redirect('/')
+    else:    
+        if request.method == 'POST':
+            
+            editedItem.name = request.form['name']
         
-        editedItem.name = request.form['name']
-     
-        editedItem.description = request.form['description']
-       
-        editedItem.img_url = request.form['img_url']
-        session.add(editedItem)
-        session.commit()
-        return redirect(url_for('viewItem',id=id,item_id=item_id))
-    else:
-         return render_template('edititem.html',item=editedItem)    
+            editedItem.description = request.form['description']
+        
+            editedItem.img_url = request.form['img_url']
+            session.add(editedItem)
+            session.commit()
+            return redirect(url_for('viewItem',id=id,item_id=item_id))
+        else:
+            return render_template('edititem.html',item=editedItem)    
     
 
 @app.route('/catalog/Snowboarding/Snowboard')
