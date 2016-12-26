@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Item
+from database_setup import Base, Category, Item, User
 
 from flask import session as login_session
 import random
@@ -20,7 +20,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catlog Application"
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///restaurantmenuauth.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -106,6 +106,13 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+
+
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+        login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -116,6 +123,31 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
+
+
+# User Helper Functions
+
+
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 
 @app.route('/gdisconnect')
@@ -160,7 +192,7 @@ def newCat():
     if 'username' not in login_session:
         return redirect('/')
     if request.method == 'POST':
-        newCat = Category(name=request.form['name'],url=request.form['url'])
+        newCat = Category(name=request.form['name'],url=request.form['url'],user_id=login_session['user_id'])
         session.add(newCat)
         session.commit()
         return redirect(url_for('showItemss'))
@@ -183,7 +215,7 @@ def addNewItem(id):
      category = session.query(Category).filter_by(id=id).one()
      if request.method == 'POST':
          newItem = Item(name=request.form['name'],img_url=request.form['img_url'],
-                            description=request.form['description'],category_id=id)
+                            description=request.form['description'],category_id=id,user_id=login_session['user_id'])
          session.add(newItem)
          session.commit()
          return redirect(url_for('showAllItemss',id=id))
