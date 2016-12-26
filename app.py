@@ -109,9 +109,14 @@ def gconnect():
 
 
     user_id = getUserID(login_session['email'])
+    print 'userid'
+    print user_id
+    login_session['user_id'] = user_id
+    
     if not user_id:
         user_id = createUser(login_session)
         login_session['user_id'] = user_id
+
 
     output = ''
     output += '<h1>Welcome, '
@@ -196,6 +201,7 @@ def newCat():
     if 'username' not in login_session:
         return redirect('/')
     if request.method == 'POST':
+        print login_session['user_id']
         newCat = Category(name=request.form['name'],url=request.form['url'],user_id=login_session['user_id'])
         session.add(newCat)
         session.commit()
@@ -207,9 +213,13 @@ def newCat():
 @app.route('/catalog/<int:id>/items')
 def showAllItemss(id):
     category = session.query(Category).filter_by(id=id).one()
+    creator = getUserInfo(category.user_id)
     items = session.query(Item).filter_by(
         category_id=id).all()
-    return render_template('items.html', items=items, category=category)
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+        return render_template('publicitems.html', items=items, category=category, creator=creator)
+    else:
+        return render_template('items.html', items=items, category=category, creator=creator)
     # return "This page will show all home page"
 
 
@@ -218,6 +228,8 @@ def showAllItemss(id):
 def addNewItem(id):
      category = session.query(Category).filter_by(id=id).one()
      if request.method == 'POST':
+         print login_session['user_id']
+         
          newItem = Item(name=request.form['name'],img_url=request.form['img_url'],
                             description=request.form['description'],category_id=id,user_id=login_session['user_id'])
          session.add(newItem)
@@ -232,7 +244,12 @@ def addNewItem(id):
 def viewItem(id,item_id):
      category = session.query(Category).filter_by(id=id).one()
      item = session.query(Item).filter_by(id=item_id).one()
-     return render_template('item.html',item=item,category=category)
+     creator = getUserInfo(item.user_id)
+     print login_session['user_id']
+     if 'username' not in login_session or creator.id != login_session['user_id']:
+         return render_template('publicitem.html', item=item, category=category, creator=creator)
+     else:
+        return render_template('item.html',item=item,category=category, creator=creator)
     # return "This page will show all home page"
 
 
