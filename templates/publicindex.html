@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+
+            
+            
+
+
+            {% for category in categories %}
+
+
+
+<p>{{category.name}}</p>
+<a href="/catalog/{{category.id}}/items">view</a>
+
+
+
+
+
+{% endfor %}
+<hr/>
+{% endblock %}
+        

@@ -184,8 +184,12 @@ def gdisconnect():
 @app.route('/')
 def showItemss():
     # return "This page will show all home page"
+    # items = session.query(Item).order_by(asc(Item.name))
         categories = session.query(Category).all()
-        return render_template('index.html',categories=categories)
+        if 'username' not in login_session:
+            return render_template('publicindex.html', categories=categories)
+        else:
+            return render_template('index.html', categories=categories)
 
 @app.route('/addnewcat', methods=['GET', 'POST'])
 def newCat():

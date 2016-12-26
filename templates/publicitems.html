@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>List of ITEMS in {{category.name}}</h2>
+
+
+<h1>{{category.name}}</h1> 
+
+
+<hr/>
+
+	{% for i in items %}
+		
+
+	<a href="{{url_for('viewItem', id = category.id, item_id = i.id )}}"	<p>{{i.name}}</p>
+	
+
+	
+
+	
+</br>
+</br>
+
+
+		{% endfor %}
+        {% endblock %}
+
+		
