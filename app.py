@@ -290,28 +290,12 @@ def editItem(id,item_id):
             return redirect(url_for('viewItem',id=id,item_id=item_id))
         else:
             return render_template('edititem.html',item=editedItem)    
-    
-
-@app.route('/catalog/Snowboarding/Snowboard')
-def showOneItemss():
-    # return "This page will show all home page"
-        return render_template('item.html')
-
-@app.route('/catalog/Snowboard/edit')
-def editItemss():
-    # return "This page will show all home page"
-        return render_template('edititem.html')
-
-@app.route('/catalog/Snowboard/delete')
-def deleteItemss():
-    # return "This page will show all home page"
-        return render_template('deleteitem.html')
 
 @app.route('/catalog.json')
 def showItemssApi():
-    # return "This page will show all home page"
-        return render_template('index.html')
-
+    categories = session.query(Category).all()
+    return jsonify(catlogs= [c.serialize for c in categories])
+    
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
