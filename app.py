@@ -157,6 +157,8 @@ def showItemss():
 
 @app.route('/addnewcat', methods=['GET', 'POST'])
 def newCat():
+    if 'username' not in login_session:
+        return redirect('/')
     if request.method == 'POST':
         newCat = Category(name=request.form['name'],url=request.form['url'])
         session.add(newCat)
