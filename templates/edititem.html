@@ -2,11 +2,22 @@
 
 {% block content %}
 
-<h1>edit item <h1>
-    <form method="post">
-    Name: <input type="text" name="name" value="{{item.name}}">
-    description:<input type ="textarea" name="description" value="{{item.description}}">
-    URL: <input type="text" name="img_url" value="{{item.img_url}}">
-    <input type="submit" value="Update item">
-    </form>
+<div class="row">
+<form class="addcat" method="post">
+   <div class="form-group">
+    <label for="name">Name: </label>
+    <input type="text" class="form-control"  name="name" id="name" value="{{item.name}}">
+  </div>
+
+<div class="form-group">  
+   <label for="description"> description:</label>
+   <textarea rows="4" class="form-control" cols="50" name="description" >{{item.description}}</textarea>
+    </div> 
+   <div class="form-group">
+   <label for="img_url"> URL: </label><input type="text" class="form-control" name="img_url" value="{{item.img_url}}">
+     </div>
+    <input type="submit" class="btn btn-default" value="Update item">
+</form>
+</div>
+
     {% endblock %}
