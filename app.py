@@ -191,10 +191,11 @@ def showItemss():
     # return "This page will show all home page"
     # items = session.query(Item).order_by(asc(Item.name))
         categories = session.query(Category).all()
+        items = session.query(Item).all()
         if 'username' not in login_session:
-            return render_template('publicindex.html', categories=categories)
+            return render_template('publicindex.html', categories=categories, items=items)
         else:
-            return render_template('index.html', categories=categories)
+            return render_template('index.html', categories=categories, items=items)
 
 @app.route('/addnewcat', methods=['GET', 'POST'])
 def newCat():

@@ -64,3 +64,11 @@ img {
     height: 400px;
     margin-top: 40px;
 }
+.add-btn{
+    margin-top: 5px;
+    width: 137px;
+    height: 38px;
+}
+.btn-add-item{
+    margin-top: -43px;
+}

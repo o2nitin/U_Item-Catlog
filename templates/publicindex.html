@@ -56,6 +56,23 @@
                </ul>
             </div>
             <div class="col-sm-8">{% block content %}
+                <h1>Top Items</h1>
+                <hr/>
+
+	{% for i in items %}
+		
+
+	<a href="{{url_for('viewItem', id = i.category_id, item_id = i.id )}}"	<p>{{i.name}}</p>
+	
+
+	
+
+	
+</br>
+</br>
+
+
+		{% endfor %}
   {% endblock %}</div>
 </div>
 
