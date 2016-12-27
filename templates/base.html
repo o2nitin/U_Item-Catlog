@@ -7,16 +7,27 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi" rel="stylesheet">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
     </head>
     <body>
       <div class="container">
           <div class="row">
-             <a href="/"    > 
+              <div class="cat-header">
+              <div class="col-sm-6 sub-header"><a href="/"    > 
           
               <h2>
             Items Catlog</h2>
-            </a>
-            <a href="/gdisconnect" class="pull-right">logout</a>  <a href="/login" class="pull-right">login</a> 
+            </a> </div>
+            <div class="col-sm-6 sub-header">
+
+                 <a href="/gdisconnect" class="login pull-right">logout</a>  <a href="/login" class="login pull-right">login</a> 
+           
+            </div>
+          </div>
+        </div>
+        <div class="row"></div>
+       
            
                <div class = 'flash'>
 		      {% with messages = get_flashed_messages() %}
@@ -31,7 +42,7 @@
     {% endwith %}
 
 </div>
-
+<div>
   {% block content %}
   {% endblock %}
 

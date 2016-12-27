@@ -1,26 +1,78 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Items catlog</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Baloo+Thambi" rel="stylesheet">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+      <div class="container">
+          <div class="row">
+              <div class="cat-header">
+              <div class="col-sm-6 sub-header"><a href="/"    > 
+          
+              <h2>
+            Items Catlog</h2>
+            </a> </div>
+            <div class="col-sm-6 sub-header">
 
-{% block content %}
+                 <a href="/gdisconnect" class="login pull-right">logout</a>  <a href="/login" class="login pull-right">login</a> 
+           
+            </div>
+          </div>
+        </div>
+        <div class="row"></div>
+       
+           
+               <div class = 'flash'>
+		      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
 
+</div>
+<div>
+<div class="row"><div class="col-sm-4"><a href="\addnewcat">add new cat</a></div></div>
 
-
+ <div class="row">
+     
+            <div class="col-sm-4 side-bar">
+                <ul>
+                {% for category in categories %}
+             <li class="col-sm-12 side-menu-line">  <img src="{{category.url}}" class="img-rounded" alt="Cinque Terre" width="40" height="40">
+             <a href="/catalog/{{category.id}}/items" class="cat">{{category.name}}</a></li>
+               
+              {% endfor %}
+               </ul>
+            </div>
+            <div class="col-sm-8">{% block content %}
+  {% endblock %}</div>
+</div>
 
             
             
-            <a href="\addnewcat">add new cat</a>
-
-            {% for category in categories %}
-
-
-
-<p>{{category.name}}</p>
-<a href="/catalog/{{category.id}}/items">view</a>
 
 
 
 
 
-{% endfor %}
 <hr/>
-{% endblock %}
-        
+
+          </div>   
+
+      </div>     
+     
+
+    </body>
+</html>

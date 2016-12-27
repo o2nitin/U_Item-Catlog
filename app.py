@@ -212,14 +212,15 @@ def newCat():
 
 @app.route('/catalog/<int:id>/items')
 def showAllItemss(id):
+    categories = session.query(Category).all()
     category = session.query(Category).filter_by(id=id).one()
     creator = getUserInfo(category.user_id)
     items = session.query(Item).filter_by(
         category_id=id).all()
     if 'username' not in login_session or creator.id != login_session['user_id']:
-        return render_template('publicitems.html', items=items, category=category, creator=creator)
+        return render_template('publicitems.html', items=items, category=category,categories=categories, creator=creator)
     else:
-        return render_template('items.html', items=items, category=category, creator=creator)
+        return render_template('items.html', items=items, category=category,categories=categories, creator=creator)
     # return "This page will show all home page"
 
 
