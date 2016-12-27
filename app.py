@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template
+from flask import request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
@@ -26,12 +27,13 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    return render_template('login.html',STATE=state)
+    return render_template('login.html', STATE=state)
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -86,8 +88,9 @@ def gconnect():
     stored_credentials = login_session.get('credentials')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+                            json.dumps('Current user is already connected'),
+                            200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -105,16 +108,12 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
-
-
-
     user_id = getUserID(login_session['email'])
     login_session['user_id'] = user_id
-    
+
     if not user_id:
         user_id = createUser(login_session)
         login_session['user_id'] = user_id
-
 
     output = ''
     output += '<h1>Welcome, '
@@ -122,7 +121,9 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px;border-radius:\
+                 150px;-webkit-border-radius:\
+                 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -157,13 +158,14 @@ def getUserID(email):
 def gdisconnect():
     access_token = login_session['access_token']
     print 'In gdisconnect access token is %s', access_token
-    print 'User name is: ' 
+    print 'User name is: '
     print login_session['username']
-    if access_token is None:
- 	print 'Access Token is None'
-    	response = make_response(json.dumps('Current user not connected.'), 401)
-    	response.headers['Content-Type'] = 'application/json'
-    	return response
+if access_token is None:
+        print 'Access Token is None'
+    	response = make_response(json.dumps('Current \
+                            user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
@@ -175,7 +177,8 @@ def gdisconnect():
     	del login_session['username']
     	del login_session['email']
     	del login_session['picture']
-    	response = make_response(json.dumps('Successfully disconnected.'), 200)
+    	response = make_response(json.dumps('Successfully \
+                                    disconnected.'), 200)
     	response.headers['Content-Type'] = 'application/json'
         flash("Logout Successfully ")
     	return redirect(url_for('showItemss'))
@@ -225,7 +228,7 @@ def showAllItemss(id):
     # return "This page will show all home page"
 
 
-#adding new item in catogery
+# adding new item in catogery
 @app.route('/catalog/<int:id>/newitem', methods=['GET', 'POST'])
 def addNewItem(id):
      category = session.query(Category).filter_by(id=id).one()
@@ -241,7 +244,7 @@ def addNewItem(id):
          return render_template('newitem.html', user=login_session['username'], category=category)
     # return "This page will show all home page"
  
-#for view a specific item
+# for view a specific item
 @app.route('/catalog/<int:id>/<int:item_id>/viewitem')
 def viewItem(id,item_id):
      category = session.query(Category).filter_by(id=id).one()
