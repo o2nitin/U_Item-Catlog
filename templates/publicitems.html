@@ -11,15 +11,13 @@
 
 	{% for i in items %}
 		
-
-	<a href="{{url_for('viewItem', id = category.id, item_id = i.id )}}"	<p>{{i.name}}</p>
+	
+<div class="col-sm-4"><div><div class="item-title">{{i.name}}</div>
+            <div class="item-img-hom"><a href="{{url_for('viewItem', id = i.category_id, item_id = i.id )}}">
+                <img src="{{i.img_url}}">	</a></div></div></div>
 	
 
-	
 
-	
-</br>
-</br>
 
 
 		{% endfor %}

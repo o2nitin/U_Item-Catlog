@@ -109,8 +109,6 @@ def gconnect():
 
 
     user_id = getUserID(login_session['email'])
-    print 'userid'
-    print user_id
     login_session['user_id'] = user_id
     
     if not user_id:
@@ -179,12 +177,14 @@ def gdisconnect():
     	del login_session['picture']
     	response = make_response(json.dumps('Successfully disconnected.'), 200)
     	response.headers['Content-Type'] = 'application/json'
-    	return response
+        flash("Logout Successfully ")
+    	return redirect(url_for('showItemss'))
     else:
 	
     	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
     	response.headers['Content-Type'] = 'application/json'
-    	return response
+        flash("Failed to logout ")
+    	return redirect(url_for('showItemss'))
 
 @app.route('/')
 def showItemss():
@@ -195,20 +195,20 @@ def showItemss():
         if 'username' not in login_session:
             return render_template('publicindex.html', categories=categories, items=items)
         else:
-            return render_template('index.html', categories=categories, items=items)
+            return render_template('index.html', categories=categories, items=items, user=login_session['username'])
 
 @app.route('/addnewcat', methods=['GET', 'POST'])
 def newCat():
     if 'username' not in login_session:
         return redirect('/')
     if request.method == 'POST':
-        print login_session['user_id']
+        # print login_session['user_id']
         newCat = Category(name=request.form['name'],url=request.form['url'],user_id=login_session['user_id'])
         session.add(newCat)
         session.commit()
         return redirect(url_for('showItemss'))
     else:
-        return render_template('addcat.html')
+        return render_template('addcat.html',user=login_session['username'])
 
 
 @app.route('/catalog/<int:id>/items')
@@ -218,10 +218,10 @@ def showAllItemss(id):
     creator = getUserInfo(category.user_id)
     items = session.query(Item).filter_by(
         category_id=id).all()
-    if 'username' not in login_session or creator.id != login_session['user_id']:
+    if 'username' not in login_session:
         return render_template('publicitems.html', items=items, category=category,categories=categories, creator=creator)
     else:
-        return render_template('items.html', items=items, category=category,categories=categories, creator=creator)
+        return render_template('items.html', items=items, category=category,categories=categories, user=login_session['username'], creator=creator)
     # return "This page will show all home page"
 
 
@@ -238,7 +238,7 @@ def addNewItem(id):
          session.commit()
          return redirect(url_for('showAllItemss',id=id))
      else:
-         return render_template('newitem.html',category=category)
+         return render_template('newitem.html', user=login_session['username'], category=category)
     # return "This page will show all home page"
  
 #for view a specific item
@@ -247,11 +247,10 @@ def viewItem(id,item_id):
      category = session.query(Category).filter_by(id=id).one()
      item = session.query(Item).filter_by(id=item_id).one()
      creator = getUserInfo(item.user_id)
-     print login_session['user_id']
-     if 'username' not in login_session or creator.id != login_session['user_id']:
+     if 'username' not in login_session:
          return render_template('publicitem.html', item=item, category=category, creator=creator)
      else:
-        return render_template('item.html',item=item,category=category, creator=creator)
+        return render_template('item.html',item=item,category=category,user=login_session['username'], creator=creator)
     # return "This page will show all home page"
 
 
@@ -269,7 +268,7 @@ def deleteItem(id,item_id):
             session.commit()
             return redirect(url_for('showAllItemss',id=id))
         else:
-            return render_template('deleteitem.html')  
+            return render_template('deleteitem.html',user=login_session['username'])  
 
 #  edit item
 @app.route('/catalog/<int:id>/<int:item_id>/edititem', methods=['GET', 'POST'])
@@ -291,7 +290,7 @@ def editItem(id,item_id):
             session.commit()
             return redirect(url_for('viewItem',id=id,item_id=item_id))
         else:
-            return render_template('edititem.html',item=editedItem)    
+            return render_template('edititem.html',user=login_session['username'], item=editedItem)    
 
 @app.route('/catalog.json')
 def showItemssApi():
