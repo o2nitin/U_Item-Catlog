@@ -22,4 +22,4 @@ $ cd /vagrant/catalog
 $ python app.py
 ```
 
-Then navigate to localhost:8000 on your favorite browser.
+Then navigate to localhost:5000 on your favorite browser.
