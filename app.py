@@ -160,19 +160,19 @@ def gdisconnect():
     print 'In gdisconnect access token is %s', access_token
     print 'User name is: '
     print login_session['username']
-if access_token is None:
+    if access_token is None:
         print 'Access Token is None'
     	response = make_response(json.dumps('Current \
-                            user not connected.'), 401)
+                                            user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-url = 'https://accounts.google.com/o/oauth2/revoke?token=%s'\
-         % login_session['access_token']
-h = httplib2.Http()
-result = h.request(url, 'GET')[0]
-print 'result is '
-print result
-if result['status'] == '200':
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s'\
+             % login_session['access_token']
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    print 'result is '
+    print result
+    if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
         del login_session['username']
@@ -183,12 +183,12 @@ if result['status'] == '200':
         response.headers['Content-Type'] = 'application/json'
         flash("Logout Successfully ")
         return redirect(url_for('showItemss'))
-else:
-    response = make_response(json.dumps('Failed to \
+    else:
+        response = make_response(json.dumps('Failed to \
                                         revoke token for given user', 400))
-    response.headers['Content-Type'] = 'application/json'
-    flash("Failed to logout ")
-    return redirect(url_for('showItemss'))
+        response.headers['Content-Type'] = 'application/json'
+        flash("Failed to logout ")
+        return redirect(url_for('showItemss'))
 
 
 @app.route('/')
@@ -291,8 +291,7 @@ def viewItem(id, item_id):
 def deleteItem(id, item_id):
     itemToDelete = session.query(Item).filter_by(id=item_id).one()
     creator = getUserInfo(itemToDelete.user_id)
-    if 'username' not in login_session
-    or creator.id != login_session['user_id']:
+    if 'username' not in login_session or creator.id != login_session['user_id']:
         flash("you are not allow to access this url")
         return redirect('/')
     else:
@@ -310,8 +309,7 @@ def deleteItem(id, item_id):
 def editItem(id, item_id):
     editedItem = session.query(Item).filter_by(id=item_id).one()
     creator = getUserInfo(editedItem.user_id)
-    if 'username' not in login_session
-    or creator.id != login_session['user_id']:
+    if 'username' not in login_session or creator.id != login_session['user_id']:
         flash("you are not allow to access this url")
         return redirect('/')
     else:
