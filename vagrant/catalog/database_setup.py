@@ -55,7 +55,7 @@ class Item(Base):
             'name': self.name,
             'description': self.description,
             'id': self.id,
-            'img_url': self.price,
+            'img_url': self.img_url,
         }
 
 

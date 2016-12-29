@@ -342,10 +342,28 @@ def editItem(id, item_id):
                                    item=editedItem)
 
 
+# api for displying json data for all categories
 @app.route('/catalog.json')
 def showItemssApi():
     categories = session.query(Category).all()
     return jsonify(catlogs=[c.serialize for c in categories])
+
+
+# api for displying all items for a Category
+@app.route('/catalog/<int:id>/items.json')
+def viewItemsApi(id):
+    category = session.query(Category).filter_by(id=id).one()
+    items = session.query(Item).filter_by(
+        category_id=id).all()    
+    return jsonify(CategoryItems=[i.serialize for i in items])
+
+
+# api for displying a specific item for a Category
+@app.route('/catalog/<int:id>/<int:item_id>/viewitem.json')
+def viewItemApi(id, item_id):
+    category = session.query(Category).filter_by(id=id).one()
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(Item=item.serialize)
 
 
 if __name__ == '__main__':
