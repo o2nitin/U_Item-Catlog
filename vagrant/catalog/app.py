@@ -3,6 +3,7 @@ from flask import request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
+from functools import wraps
 
 from flask import session as login_session
 import random
@@ -154,6 +155,14 @@ def getUserID(email):
         return None
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in login_session:
+            return redirect(url_for('showItemss', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session['access_token']
@@ -206,9 +215,10 @@ def showItemss():
 
 
 @app.route('/addnewcat', methods=['GET', 'POST'])
+@login_required
 def newCat():
-    if 'username' not in login_session:
-        return redirect('/')
+    # if 'username' not in login_session:
+    #     return redirect('/')
     if request.method == 'POST':
         # print login_session['user_id']
         newCat = Category(name=request.form['name'],
@@ -246,6 +256,7 @@ def showAllItemss(id):
 
 # adding new item in catogery
 @app.route('/catalog/<int:id>/newitem', methods=['GET', 'POST'])
+@login_required
 def addNewItem(id):
     category = session.query(Category).filter_by(id=id).one()
     if request.method == 'POST':
@@ -288,6 +299,7 @@ def viewItem(id, item_id):
 # delete item from list
 @app.route('/catalog/<int:id>/<int:item_id>/deleteitem',
            methods=['GET', 'POST'])
+@login_required
 def deleteItem(id, item_id):
     itemToDelete = session.query(Item).filter_by(id=item_id).one()
     creator = getUserInfo(itemToDelete.user_id)
@@ -306,6 +318,7 @@ def deleteItem(id, item_id):
 
 #  edit item
 @app.route('/catalog/<int:id>/<int:item_id>/edititem', methods=['GET', 'POST'])
+@login_required
 def editItem(id, item_id):
     editedItem = session.query(Item).filter_by(id=item_id).one()
     creator = getUserInfo(editedItem.user_id)
