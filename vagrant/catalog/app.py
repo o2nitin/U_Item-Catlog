@@ -159,6 +159,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'username' not in login_session:
+            flash("Login required for access this url")
             return redirect(url_for('showItemss', next=request.url))
         return f(*args, **kwargs)
     return decorated_function
